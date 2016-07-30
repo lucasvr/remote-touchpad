@@ -13,8 +13,10 @@
 #include <resolv.h>
 #include <arpa/inet.h>
 #include <errno.h>
+#include <strings.h>
+#include <stdlib.h>
 
-#define MY_PORT		9999
+#define MY_PORT		5000
 #define MAXBUF		1024
 
 int main(int Count, char *Strings[])
@@ -60,7 +62,10 @@ int main(int Count, char *Strings[])
 		printf("%s:%d connected\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
 		/*---Echo back anything sent---*/
-		send(clientfd, buffer, recv(clientfd, buffer, MAXBUF, 0), 0);
+		//send(clientfd, buffer, recv(clientfd, buffer, MAXBUF, 0), 0);
+
+		recv(clientfd, buffer, MAXBUF, 0);
+		printf("[SERVER] Received from the client: [%s]\n", buffer);
 
 		/*---Close data connection---*/
 		close(clientfd);
