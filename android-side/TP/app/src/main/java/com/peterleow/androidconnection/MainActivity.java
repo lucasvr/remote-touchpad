@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
     }
 
     public void getCommunicationActivity(View view) {
-        Intent intent = new Intent(getApplicationContext(), Communcation.class);
+        Intent intent = new Intent(getApplicationContext(), Communication.class);
         startActivity(intent);
     }
 
