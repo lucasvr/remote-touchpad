@@ -15,9 +15,10 @@
 #include <errno.h>
 #include <strings.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MY_PORT		5000
-#define MAXBUF		1024
+#define MAXBUF		1024 * 4
 
 int main(int Count, char *Strings[])
 {   int sockfd;
@@ -52,21 +53,23 @@ int main(int Count, char *Strings[])
 	}
 
 	/*---Forever... ---*/
-	while (1)
-	{	int clientfd;
+	//while (1)
+	{	
+		int clientfd;
 		struct sockaddr_in client_addr;
 		int addrlen=sizeof(client_addr);
 
 		/*---accept a connection (creating a data pipe)---*/
+		printf("[SERVER] Waiting for clients\n");
 		clientfd = accept(sockfd, (struct sockaddr*)&client_addr, &addrlen);
 		printf("%s:%d connected\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
-
-		/*---Echo back anything sent---*/
-		//send(clientfd, buffer, recv(clientfd, buffer, MAXBUF, 0), 0);
-
-		recv(clientfd, buffer, MAXBUF, 0);
-		printf("[SERVER] Received from the client: [%s]\n", buffer);
-
+		
+		int byte_cnt = 1;
+		while(byte_cnt) {
+			byte_cnt = recv(clientfd, buffer, MAXBUF, 0);
+			printf("[SERVER] Received from the client: [%s]\n", buffer);
+			memset(buffer, 0, sizeof(buffer));
+		}
 		/*---Close data connection---*/
 		close(clientfd);
 	}
